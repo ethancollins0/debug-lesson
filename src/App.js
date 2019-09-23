@@ -13,19 +13,22 @@ export default class App extends Component {
   }
 
   updateSearch = (input) => {
+    console.log(input)
     this.setState({
       filter: input
+    }, () => {
+      this.searchFilter()
     })
-    this.searchFilter()
   }
 
   searchFilter = () => {
     let results = this.state.characters.filter(char => {
       return char.name.toLowerCase().includes(this.state.filter.toLowerCase())
     })
+
     this.setState({
-        display: results
-      })
+      display: results
+    })
   }
 
   componentDidMount = () => {

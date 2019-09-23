@@ -4,7 +4,6 @@ export default class SearchBar extends Component {
 
     handleChange = (event) => {
         event.persist()
-        console.log(event.target.value)
         this.props.updateSearch(event.target.value)
     }
 
