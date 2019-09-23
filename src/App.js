@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css'
+import SearchBar from './components/SearchBar'
+import Card from './components/Card'
+
+export default class App extends Component {
+
+  state = {
+    characters: [],
+    display: [],
+    filter: ' '
+  }
+
+  updateSearch = (input) => {
+    this.setState({
+      filter: input
+    })
+    this.searchFilter()
+  }
+
+  searchFilter = () => {
+    let results = this.state.characters.filter(char => {
+      return char.name.toLowerCase().includes(this.state.filter.toLowerCase())
+    })
+    this.setState({
+        display: results
+      })
+  }
+
+  componentDidMount = () => {
+    fetch('https://rickandmortyapi.com/api/character')
+      .then(resp => resp.json())
+      .then(chars => this.setState({
+        characters: chars.results,
+        display: chars.results
+      }))
+  }
+
+  cardsForDisplay = () => {
+    return this.state.display.map(char => {
+      return <Card character={char} />
+    })
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <SearchBar updateSearch={this.updateSearch} />
+        {this.cardsForDisplay()}
+      </div>
+    )
+  }
 }
 
-export default App;
